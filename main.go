@@ -6,6 +6,7 @@ import (
 
 	"go-ders-programi/db"
 	"go-ders-programi/routers"
+	"go-ders-programi/util"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -13,7 +14,7 @@ import (
 )
 
 func init() {
-	if os.Getenv("ENV") != "prod" {
+	if os.Getenv("APP_ENV") != "prod" {
 		err := godotenv.Load()
 		if err != nil {
 			panic(err)
@@ -34,5 +35,5 @@ func main() {
 	routers.SetupPlanRouter(app)
 	routers.SetupAuthRouter(app)
 
-	app.Logger.Fatal(app.Start(":" + os.Getenv("PORT")))
+	app.Logger.Fatal(app.Start(":" + util.GetPort()))
 }
