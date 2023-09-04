@@ -5,9 +5,12 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
-      - DATABASE_URL=root:dbpassword@tcp(db:3306)/go-project?charset=utf8mb4&parseTime=True&loc=Local
+      - DATABASE_URL=root:root@tcp(db:3306)/project?charset=utf8mb4&parseTime=True&loc=Local
+      - APP_ENV=prod
     depends_on:
-      - db
+      db: 
+        condition: service_healthy
+    restart: on-failure
     
   db:
     image: mysql
@@ -16,4 +19,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=project
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
     
